@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Login from './src/pages/Login';
+import Register from './src/pages/Register';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -18,6 +19,10 @@ export default function App() {
         <Screen
           name='Login'
           component={Login}
+        />
+        <Screen
+          name='Register'
+          component={Register}
         />
       </Navigator>
     </NavigationContainer>
