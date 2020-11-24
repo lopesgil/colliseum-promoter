@@ -28,7 +28,10 @@ export default function Login() {
                                 value={props.value}
                             />
                         )}
-                        rules={{ required: true }}
+                        rules={{
+                            required: 'O e-mail é obrigatório.',
+                            pattern: /^\S+@\S+$/i,
+                        }}
                         name='email'
                         defaultValue=''
                     />
@@ -45,7 +48,7 @@ export default function Login() {
                                 value={props.value}
                             />
                         )}
-                        rules={{ required: true }}
+                        rules={{ required: 'A senha é obrigatória.' }}
                         name='password'
                         defaultValue=''
                     />
