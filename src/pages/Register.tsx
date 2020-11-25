@@ -14,6 +14,7 @@ interface RegisterData {
 export default function Register() {
     const { control, getValues, handleSubmit, errors } = useForm({ mode: 'onTouched' });
     const onSubmit = (data: RegisterData) => { console.log(data) };
+    const onError = (errors: Object) => { console.log(errors) };
     const navigation = useNavigation();
 
     return (
@@ -143,7 +144,7 @@ export default function Register() {
                     {errors.passwordConfirmation && <Text style={{ color: 'red' }}>{errors.passwordConfirmation.message}</Text>}
                 </View>
                 <View style={styles.button}>
-                    <Button title='CADASTRAR' onPress={handleSubmit(onSubmit)} />
+                    <Button title='CADASTRAR' onPress={handleSubmit(onSubmit, onError)} />
                 </View>
             </View>
         </View>

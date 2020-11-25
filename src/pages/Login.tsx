@@ -11,6 +11,7 @@ interface FormData {
 export default function Login() {
     const { control, handleSubmit, errors } = useForm({ mode: 'onTouched' });
     const onSubmit = (data: FormData) => { console.log(data) };
+    const onError = (errors: Object) => { console.log(errors) };
     const navigation = useNavigation();
 
     return (
@@ -67,7 +68,7 @@ export default function Login() {
                     {errors.password && <Text style={{ color: 'red' }}>{errors.password.message}</Text>}
                 </View>
                 <View style={styles.button}>
-                    <Button title='ENTRAR' onPress={handleSubmit(onSubmit)} />
+                    <Button title='ENTRAR' onPress={handleSubmit(onSubmit, onError)} />
                 </View>
                 <View style={styles.button}>
                     <Button title='CADASTRAR-SE' onPress={() => navigation.navigate('Register')} />
