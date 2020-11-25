@@ -9,7 +9,7 @@ interface FormData {
 }
 
 export default function Login() {
-    const { control, handleSubmit, errors } = useForm();
+    const { control, handleSubmit, errors } = useForm({ mode: 'onTouched' });
     const onSubmit = (data: FormData) => { console.log(data) };
     const navigation = useNavigation();
 
@@ -22,6 +22,10 @@ export default function Login() {
                         control={control}
                         render={(props) => (
                             <TextInput
+                                autoCompleteType='email'
+                                autoCorrect={false}
+                                keyboardType='email-address'
+                                textContentType='emailAddress'
                                 style={styles.input}
                                 onBlur={props.onBlur}
                                 onChangeText={(value) => props.onChange(value)}
@@ -30,11 +34,15 @@ export default function Login() {
                         )}
                         rules={{
                             required: 'O e-mail é obrigatório.',
-                            pattern: /^\S+@\S+$/i,
+                            pattern: {
+                                value: /^\S+@\S+$/i,
+                                message: 'Formato de e-mail inválido.'
+                            },
                         }}
                         name='email'
                         defaultValue=''
                     />
+                    {errors.email && <Text style={{ color: 'red' }}>{errors.email.message}</Text>}
                 </View>
                 <View>
                     <Text style={styles.label}>Senha:</Text>
@@ -42,6 +50,10 @@ export default function Login() {
                         control={control}
                         render={(props) => (
                             <TextInput
+                                secureTextEntry
+                                autoCompleteType='password'
+                                autoCorrect={false}
+                                textContentType='password'
                                 style={styles.input}
                                 onBlur={props.onBlur}
                                 onChangeText={(value) => props.onChange(value)}
@@ -52,6 +64,7 @@ export default function Login() {
                         name='password'
                         defaultValue=''
                     />
+                    {errors.password && <Text style={{ color: 'red' }}>{errors.password.message}</Text>}
                 </View>
                 <View style={styles.button}>
                     <Button title='ENTRAR' onPress={handleSubmit(onSubmit)} />
@@ -72,8 +85,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#0e101c',
     },
     formBox: {
-        borderWidth: 1,
-        borderColor: 'black',
         paddingVertical: 20,
     },
     label: {

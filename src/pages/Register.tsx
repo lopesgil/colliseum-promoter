@@ -12,11 +12,10 @@ interface RegisterData {
 }
 
 export default function Register() {
-    const { control, handleSubmit, errors } = useForm();
+    const { control, getValues, handleSubmit, errors } = useForm({ mode: 'onTouched' });
     const onSubmit = (data: RegisterData) => { console.log(data) };
     const navigation = useNavigation();
 
-    console.log(errors);
     return (
         <View style={styles.container}>
             <View style={styles.formBox}>
@@ -24,18 +23,22 @@ export default function Register() {
                     <Text style={styles.label}>Nome:</Text>
                     <Controller
                         control={control}
-                        render={(props) => (
+                        render={({ onBlur, onChange, value }) => (
                             <TextInput
+                                autoCompleteType='name'
+                                autoCorrect={false}
+                                textContentType='name'
                                 style={styles.input}
-                                onBlur={props.onBlur}
-                                onChangeText={(value) => props.onChange(value)}
-                                value={props.value}
+                                onBlur={onBlur}
+                                onChangeText={(value) => onChange(value)}
+                                value={value}
                             />
                         )}
                         rules={{ required: 'O nome é obrigatório.' }}
                         name='name'
                         defaultValue=''
                     />
+                    {errors.name && <Text style={{ color: 'red' }}>{errors.name.message}</Text>}
                 </View>
                 <View>
                     <Text style={styles.label}>E-mail:</Text>
@@ -43,16 +46,27 @@ export default function Register() {
                         control={control}
                         render={(props) => (
                             <TextInput
+                                autoCompleteType='email'
+                                autoCorrect={false}
+                                keyboardType='email-address'
+                                textContentType='emailAddress'
                                 style={styles.input}
                                 onBlur={props.onBlur}
                                 onChangeText={(value) => props.onChange(value)}
                                 value={props.value}
                             />
                         )}
-                        rules={{ required: 'O e-mail é obrigatório.' }}
+                        rules={{
+                            required: 'O e-mail é obrigatório.',
+                            pattern: {
+                                value: /^\S+@\S+$/i,
+                                message: 'Formato de e-mail inválido.'
+                            },
+                        }}
                         name='email'
                         defaultValue=''
                     />
+                    {errors.email && <Text style={{ color: 'red' }}>{errors.email.message}</Text>}
                 </View>
                 <View>
                     <Text style={styles.label}>Telefone:</Text>
@@ -60,6 +74,10 @@ export default function Register() {
                         control={control}
                         render={(props) => (
                             <TextInput
+                                autoCompleteType='tel'
+                                autoCorrect={false}
+                                keyboardType='phone-pad'
+                                textContentType='telephoneNumber'
                                 style={styles.input}
                                 onBlur={props.onBlur}
                                 onChangeText={(value) => props.onChange(value)}
@@ -70,6 +88,7 @@ export default function Register() {
                         name='phoneNumber'
                         defaultValue=''
                     />
+                    {errors.phoneNumber && <Text style={{ color: 'red' }}>{errors.phoneNumber.message}</Text>}
                 </View>
                 <View>
                     <Text style={styles.label}>Senha:</Text>
@@ -77,6 +96,10 @@ export default function Register() {
                         control={control}
                         render={(props) => (
                             <TextInput
+                                secureTextEntry
+                                autoCompleteType='password'
+                                autoCorrect={false}
+                                textContentType='newPassword'
                                 style={styles.input}
                                 onBlur={props.onBlur}
                                 onChangeText={(value) => props.onChange(value)}
@@ -87,6 +110,7 @@ export default function Register() {
                         name='password'
                         defaultValue=''
                     />
+                    {errors.password && <Text style={{ color: 'red' }}>{errors.password.message}</Text>}
                 </View>
                 <View>
                     <Text style={styles.label}>Confirmação de senha:</Text>
@@ -94,16 +118,29 @@ export default function Register() {
                         control={control}
                         render={(props) => (
                             <TextInput
+                                secureTextEntry
+                                autoCompleteType='password'
+                                autoCorrect={false}
+                                textContentType='password'
                                 style={styles.input}
                                 onBlur={props.onBlur}
                                 onChangeText={(value) => props.onChange(value)}
                                 value={props.value}
                             />
                         )}
-                        rules={{ required: 'A confirmação de senha é obrigatória.' }}
+                        rules={{
+                            required: 'A confirmação de senha é obrigatória.',
+                            validate: {
+                                matchesPreviousPassword: (value) => {
+                                    const { password } = getValues();
+                                    return password === value || 'As senhas não coincidem.';
+                                }
+                            }
+                        }}
                         name='passwordConfirmation'
                         defaultValue=''
                     />
+                    {errors.passwordConfirmation && <Text style={{ color: 'red' }}>{errors.passwordConfirmation.message}</Text>}
                 </View>
                 <View style={styles.button}>
                     <Button title='CADASTRAR' onPress={handleSubmit(onSubmit)} />
