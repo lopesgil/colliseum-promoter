@@ -13,7 +13,7 @@ export default function EditEvent() {
             img1: "https://www.giromarilia.com.br/img/news/party_1502548839.jpg"
         },
     }
-    const cu = () => {return 'cu'}
+    const test = () => {return 'test'}
 
     const styles = StyleSheet.create({
         container: {
@@ -96,7 +96,7 @@ export default function EditEvent() {
             source={{uri: event.images.img1,}}
             />
             <View style={styles.deleteButton}>
-                <Button color="transparent" title='DELETAR EVENTO' onPress={cu} />
+                <Button color="transparent" title='DELETAR EVENTO' onPress={test} />
             </View>
 
             <Text style={styles.index}>Descrição do Evento</Text>
@@ -117,7 +117,7 @@ export default function EditEvent() {
 
 
             <View style={styles.submitButton}>
-                <Button title='SALVAR ALTERAÇÕES' onPress={cu} />
+                <Button title='SALVAR ALTERAÇÕES' onPress={test} />
             </View>
         </View>
 
