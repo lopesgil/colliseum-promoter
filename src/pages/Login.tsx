@@ -73,6 +73,9 @@ export default function Login() {
                 <View style={styles.button}>
                     <Button title='CADASTRAR-SE' onPress={() => navigation.navigate('Register')} />
                 </View>
+                <View style={styles.button}>
+                    <Button title='EDITAR EVENTO (TESTE)' onPress={() => navigation.navigate('EditEvent')} />
+                </View>
             </View>
         </View>
     );
