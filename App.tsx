@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Login from './src/pages/Login';
 import Register from './src/pages/Register';
+import CreateEvent from './src/pages/CreateEvent';
 import EditEvent from './src/pages/EditEvent'
 
 const { Navigator, Screen } = createStackNavigator();
@@ -24,6 +25,10 @@ export default function App() {
         <Screen
           name='Register'
           component={Register}
+        />
+        <Screen
+          name='CreateEvent'
+          component={CreateEvent}
         />
         <Screen
           name='EditEvent'

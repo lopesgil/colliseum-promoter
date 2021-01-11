@@ -12,10 +12,13 @@ interface RegisterData {
 }
 
 export default function Register() {
-    const { control, getValues, handleSubmit, errors } = useForm({ mode: 'onTouched' });
-    const onSubmit = (data: RegisterData) => { console.log(data) };
-    const onError = (errors: Object) => { console.log(errors) };
     const navigation = useNavigation();
+    const { control, getValues, handleSubmit, errors } = useForm({ mode: 'onTouched' });
+    const onSubmit = (data: RegisterData) => {
+        console.log(data);
+        navigation.navigate('CreateEvent');
+    };
+    const onError = (errors: Object) => { console.log(errors) };
 
     return (
         <View style={styles.container}>
