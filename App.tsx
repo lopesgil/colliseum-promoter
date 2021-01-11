@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from './src/pages/Login';
 import Register from './src/pages/Register';
 import EditEvent from './src/pages/EditEvent'
+import Home from './src/pages/Home'
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -28,6 +29,10 @@ export default function App() {
         <Screen
           name='EditEvent'
           component={EditEvent}
+        />
+        <Screen
+          name='Home'
+          component={Home}
         />
       </Navigator>
     </NavigationContainer>

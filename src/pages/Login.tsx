@@ -76,6 +76,9 @@ export default function Login() {
                 <View style={styles.button}>
                     <Button title='EDITAR EVENTO (TESTE)' onPress={() => navigation.navigate('EditEvent')} />
                 </View>
+                <View style={styles.button}>
+                    <Button title='Homepage (TESTE)' onPress={() => navigation.navigate('Home')} />
+                </View>
             </View>
         </View>
     );
