@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { FAB } from 'react-native-paper';
 
 export default function Login() {
     const navigation = useNavigation();
@@ -31,6 +31,12 @@ export default function Login() {
                 <Text style={styles.index}>{event.date}</Text>
                 <Button title='Ver participantes e Editar Evento' onPress={() => navigation.navigate('EditEvent')} />
             </View>
+            <FAB
+                style={styles.fab}
+                small
+                icon='plus'
+                onPress={() => {navigation.navigate('CreateEvent')}}
+            />
         </View>
         
     );
@@ -93,5 +99,11 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
         color: "black",
-    },  
+    },
+    fab: {
+        position: 'absolute',
+        margin: 16,
+        right: 5,
+        bottom: 45,
+    },
 });

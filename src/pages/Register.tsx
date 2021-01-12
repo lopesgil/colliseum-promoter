@@ -16,7 +16,7 @@ export default function Register() {
     const { control, getValues, handleSubmit, errors } = useForm({ mode: 'onTouched' });
     const onSubmit = (data: RegisterData) => {
         console.log(data);
-        navigation.navigate('CreateEvent');
+        navigation.navigate('Home');
     };
     const onError = (errors: Object) => { console.log(errors) };
 

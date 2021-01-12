@@ -9,10 +9,13 @@ interface FormData {
 }
 
 export default function Login() {
-    const { control, handleSubmit, errors } = useForm({ mode: 'onTouched' });
-    const onSubmit = (data: FormData) => { console.log(data) };
-    const onError = (errors: Object) => { console.log(errors) };
     const navigation = useNavigation();
+    const { control, handleSubmit, errors } = useForm({ mode: 'onTouched' });
+    const onSubmit = (data: FormData) => {
+        console.log(data);
+        navigation.navigate('Home');
+    };
+    const onError = (errors: Object) => { console.log(errors) };
 
     return (
         <View style={styles.container}>
@@ -72,12 +75,6 @@ export default function Login() {
                 </View>
                 <View style={styles.button}>
                     <Button title='CADASTRAR-SE' onPress={() => navigation.navigate('Register')} />
-                </View>
-                <View style={styles.button}>
-                    <Button title='EDITAR EVENTO (TESTE)' onPress={() => navigation.navigate('EditEvent')} />
-                </View>
-                <View style={styles.button}>
-                    <Button title='Homepage (TESTE)' onPress={() => navigation.navigate('Home')} />
                 </View>
             </View>
         </View>
