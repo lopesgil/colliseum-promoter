@@ -5,11 +5,14 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-expo"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.13.2",
-    "@react-native-community/datetimepicker": "3.0.4",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.2",
     "@react-navigation/native": "^5.8.10",
@@ -34,7 +37,10 @@
     "@types/react": "~16.9.35",
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "~0.63.2",
+    "jest-expo": "^40.0.1",
+    "react-test-renderer": "^17.0.1",
     "typescript": "~3.9.5"
   },
-  "private": true
+  "private": true,
+  "peerDependencies": {}
 }
