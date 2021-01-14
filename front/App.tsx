@@ -22,7 +22,7 @@ type RootStackParamList = {
     Login: undefined,
     Register: undefined,
     CreateEvent: undefined,
-    Home: { event: EventData } | undefined,
+    Home: { event: EventData | undefined, eventDeleted: number | undefined } | undefined,
     EditEvent: { event: EventData },
 }
 

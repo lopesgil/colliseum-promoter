@@ -54,7 +54,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('getDetails', [PassportController::class, 'getDetails']);
     Route::get('logout', [PassportController::class, 'logout']);
     //admin routes
-    Route::delete('event/{id}', [EventController::class, 'destroy'])->middleware(Admin::class);
+    Route::delete('event/{id}', [EventController::class, 'destroy'])->middleware(Promoter::class);
     //password route
     Route::put('password', [userController::class, 'changePassword']);
 });

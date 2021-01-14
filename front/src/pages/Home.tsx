@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -18,8 +18,8 @@ type RootStackParamList = {
     Login: undefined,
     Register: undefined,
     CreateEvent: undefined,
-    Home: { event: EventData } | undefined,
-    EditEvent: { eventId: number },
+    Home: { event: EventData | undefined, eventDeleted: number | undefined } | undefined,
+    EditEvent: { event: EventData },
 }
 
 
@@ -29,15 +29,6 @@ export default function Home() {
     const navigation = useNavigation();
     const route = useRoute<HomeScreenProp>();
     const [events, setEvents] = useState<Array<EventData>>([]);
-    const event = {
-        name: "Wacken OA - Edição 2021",
-        description: "Descrição do Evento. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ",
-        date: "66/66/6666 - 66h-66h",
-        address: "Endereço do Evento, Rua dos Bobos, 0 - São Paulo - SP",
-        images: {
-            img1: "https://www.giromarilia.com.br/img/news/party_1502548839.jpg"
-        },
-    }
 
     useEffect(() => {
         AsyncStorage.getItem('token').then((token) => {
@@ -54,7 +45,7 @@ export default function Home() {
         }).catch((err) => {
             console.log('falha na recuperação do token\n', err);
         });
-    }, [route.params?.event]);
+    }, [route.params?.event, route.params?.eventDeleted]);
 
     if (!(events.length > 0)) return <Text>Loading</Text>;
     return (
