@@ -1,22 +1,35 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+/* import DateTimePicker from '@react-native-community/datetimepicker'; */
 import { useForm, Controller } from 'react-hook-form';
+import api from '../services/api';
 
 interface RegisterData {
     name: string,
     email: string,
-    phoneNumber: string,
+    birthdate: string,
+    gender: string,
     password: string,
     passwordConfirmation: string,
+    role: string,
 }
 
 export default function Register() {
     const navigation = useNavigation();
     const { control, getValues, handleSubmit, errors } = useForm({ mode: 'onTouched' });
     const onSubmit = (data: RegisterData) => {
+        data.role = 'promoter';
         console.log(data);
-        navigation.navigate('Home');
+        api.post('register', data).then((response) => {
+            AsyncStorage.setItem('token', response.data.token).then(() => {
+                navigation.navigate('Home');
+            });
+            console.log('cadastrado com sucesso\n', response.data.user);
+        }).catch((err) => {
+            console.log('erro no cadastro\n', err);
+        });
     };
     const onError = (errors: Object) => { console.log(errors) };
 
@@ -73,15 +86,33 @@ export default function Register() {
                     {errors.email && <Text style={{ color: 'red' }}>{errors.email.message}</Text>}
                 </View>
                 <View>
+                    <Text style={styles.label}>Data de nascimento:</Text>
+                    <Controller
+                        control={control}
+                        render={(props) => (
+                            <TextInput
+                                autoCorrect={false}
+                                keyboardType='numeric'
+                                style={styles.input}
+                                onBlur={props.onBlur}
+                                onChangeText={(value) => props.onChange(value)}
+                                value={props.value}
+                            />
+                        )}
+                        rules={{ required: 'A data de nascimento é obrigatória.' }}
+                        name='birthdate'
+                        defaultValue=''
+                    />
+                    {errors.birthdate && <Text style={{ color: 'red' }}>{errors.birthdate.message}</Text>}
+                </View>
+                <View>
                     <Text style={styles.label}>Telefone:</Text>
                     <Controller
                         control={control}
                         render={(props) => (
                             <TextInput
-                                autoCompleteType='tel'
                                 autoCorrect={false}
                                 keyboardType='phone-pad'
-                                textContentType='telephoneNumber'
                                 style={styles.input}
                                 onBlur={props.onBlur}
                                 onChangeText={(value) => props.onChange(value)}
@@ -89,10 +120,29 @@ export default function Register() {
                             />
                         )}
                         rules={{ required: 'O telefone é obrigatório.' }}
-                        name='phoneNumber'
+                        name='phone'
                         defaultValue=''
                     />
-                    {errors.phoneNumber && <Text style={{ color: 'red' }}>{errors.phoneNumber.message}</Text>}
+                    {errors.phone && <Text style={{ color: 'red' }}>{errors.phone.message}</Text>}
+                </View>
+                <View>
+                    <Text style={styles.label}>Gênero:</Text>
+                    <Controller
+                        control={control}
+                        render={(props) => (
+                            <TextInput
+                                autoCorrect={false}
+                                style={styles.input}
+                                onBlur={props.onBlur}
+                                onChangeText={(value) => props.onChange(value)}
+                                value={props.value}
+                            />
+                        )}
+                        rules={{ required: 'O gênero é obrigatório.' }}
+                        name='gender'
+                        defaultValue=''
+                    />
+                    {errors.gender && <Text style={{ color: 'red' }}>{errors.gender.message}</Text>}
                 </View>
                 <View>
                     <Text style={styles.label}>Senha:</Text>

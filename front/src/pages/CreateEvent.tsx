@@ -1,23 +1,54 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
-/* import { useNavigation } from '@react-navigation/native'; */
+import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
+import api from '../services/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface EventData {
     name: string,
-    /* date: string,
-     * time: string, */
-    address: string,
-    district: string,
-    complement: string,
-    state: string,
-    price: string,
     description: string,
+    price_raw: string,
+    price: number,
+    date: string,
+    starts_at: string,
+    city: string,
+    neighborhood: string,
+    street: string,
+    number: string,
+    latitude: number,
+    longitude: number,
 }
 
 export default function CreateEvent() {
+    const navigation = useNavigation();
     const { control, handleSubmit, errors } = useForm({ mode: 'onTouched' });
-    const onSubmit = (data: EventData) => { console.log(data) };
+    const onSubmit = (data: EventData) => {
+        data.price = parseFloat(data.price_raw);
+        data.starts_at = '1900';
+        data.city = 'Rio de Janeiro';
+        data.neighborhood = 'Lapa';
+        data.street = 'Rua da Lapa';
+        data.number = '422';
+        data.latitude = 31231;
+        data.longitude = 541123;
+        console.log(data);
+
+        AsyncStorage.getItem('token').then((token) => {
+            api.post('event', data, {
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                }
+            }).then((res) => {
+                console.log('evento criado com sucesso\n', res.data);
+                navigation.navigate('Home');
+            }).catch((err) => {
+                console.log('erro na criação do evento\n',err);
+            });
+        }).catch((err) => {
+            console.log('erro na recuperação do token\n', err);
+        });
+    };
     const onError = (errors: Object) => { console.log(errors) };
 
     return (
@@ -44,28 +75,28 @@ export default function CreateEvent() {
                     />
                     {errors.name && <Text style={{ color: 'red' }}>{errors.name.message}</Text>}
                 </View>
-                {/* <View>
+                <View>
                     <Text style={styles.label}>Data:</Text>
                     <Controller
-                    control={control}
-                    render={({ onBlur, onChange, value }) => (
-                    <TextInput
-                    autoCompleteType='off'
-                    autoCorrect={false}
-                    keyboardType='numeric'
-                    textContentType='name'
-                    style={styles.input}
-                    onBlur={onBlur}
-                    onChangeText={(value) => onChange(value)}
-                    value={value}
+                        control={control}
+                        render={({ onBlur, onChange, value }) => (
+                            <TextInput
+                                autoCompleteType='off'
+                                autoCorrect={false}
+                                keyboardType='numeric'
+                                textContentType='name'
+                                style={styles.input}
+                                onBlur={onBlur}
+                                onChangeText={(value) => onChange(value)}
+                                value={value}
+                            />
+                        )}
+                        rules={{ required: 'A data é obrigatória.' }}
+                        name='date'
+                        defaultValue=''
                     />
-                    )}
-                    rules={{ required: 'A data é obrigatória.' }}
-                    name='date'
-                    defaultValue=''
-                    />
-                    {errors.name && <Text style={{ color: 'red' }}>{errors.name.message}</Text>}
-                    </View> */}
+                    {errors.date && <Text style={{ color: 'red' }}>{errors.date.message}</Text>}
+                </View>
                 {/* <View>
                     <Text style={styles.label}>Nome do evento:</Text>
                     <Controller
@@ -87,89 +118,89 @@ export default function CreateEvent() {
                     />
                     {errors.name && <Text style={{ color: 'red' }}>{errors.name.message}</Text>}
                     </View> */}
-                <View>
-                    <Text style={styles.label}>Endereço:</Text>
+                {/* <View>
+                    <Text style={styles.label}>Rua:</Text>
                     <Controller
-                        control={control}
-                        render={({ onBlur, onChange, value }) => (
-                            <TextInput
-                                autoCompleteType='street-address'
-                                autoCorrect={false}
-                                textContentType='streetAddressLine1'
-                                style={styles.input}
-                                onBlur={onBlur}
-                                onChangeText={(value) => onChange(value)}
-                                value={value}
-                            />
-                        )}
-                        rules={{ required: 'O endereço é obrigatório' }}
-                        name='address'
-                        defaultValue=''
+                    control={control}
+                    render={({ onBlur, onChange, value }) => (
+                    <TextInput
+                    autoCompleteType='street-address'
+                    autoCorrect={false}
+                    textContentType='streetAddressLine1'
+                    style={styles.input}
+                    onBlur={onBlur}
+                    onChangeText={(value) => onChange(value)}
+                    value={value}
                     />
-                    {errors.address && <Text style={{ color: 'red' }}>{errors.address.message}</Text>}
-                </View>
-                <View>
+                    )}
+                    rules={{ required: 'O endereço é obrigatório' }}
+                    name='street'
+                    defaultValue=''
+                    />
+                    {errors.street && <Text style={{ color: 'red' }}>{errors.street.message}</Text>}
+                    </View> */}
+                {/* <View>
                     <Text style={styles.label}>Bairro:</Text>
                     <Controller
-                        control={control}
-                        render={({ onBlur, onChange, value }) => (
-                            <TextInput
-                                autoCompleteType='off'
-                                autoCorrect={false}
-                                textContentType='streetAddressLine2'
-                                style={styles.input}
-                                onBlur={onBlur}
-                                onChangeText={(value) => onChange(value)}
-                                value={value}
-                            />
-                        )}
-                        rules={{ required: 'O bairro é obrigatório.' }}
-                        name='district'
-                        defaultValue=''
+                    control={control}
+                    render={({ onBlur, onChange, value }) => (
+                    <TextInput
+                    autoCompleteType='off'
+                    autoCorrect={false}
+                    textContentType='streetAddressLine2'
+                    style={styles.input}
+                    onBlur={onBlur}
+                    onChangeText={(value) => onChange(value)}
+                    value={value}
+                    />
+                    )}
+                    rules={{ required: 'O bairro é obrigatório.' }}
+                    name='district'
+                    defaultValue=''
                     />
                     {errors.district && <Text style={{ color: 'red' }}>{errors.district.message}</Text>}
-                </View>
-                <View>
+                    </View> */}
+                {/* <View>
                     <Text style={styles.label}>Complemento:</Text>
                     <Controller
-                        control={control}
-                        render={({ onBlur, onChange, value }) => (
-                            <TextInput
-                                autoCompleteType='off'
-                                autoCorrect={false}
-                                textContentType='sublocality'
-                                style={styles.input}
-                                onBlur={onBlur}
-                                onChangeText={(value) => onChange(value)}
-                                value={value}
-                            />
-                        )}
-                        name='complement'
-                        defaultValue=''
+                    control={control}
+                    render={({ onBlur, onChange, value }) => (
+                    <TextInput
+                    autoCompleteType='off'
+                    autoCorrect={false}
+                    textContentType='sublocality'
+                    style={styles.input}
+                    onBlur={onBlur}
+                    onChangeText={(value) => onChange(value)}
+                    value={value}
                     />
-                    {/* {errors.name && <Text style={{ color: 'red' }}>{errors.name.message}</Text>} */}
-                </View>
-                <View>
+                    )}
+                    name='complement'
+                    defaultValue=''
+                    />
+                    {errors.name && <Text style={{ color: 'red' }}>{errors.name.message}</Text>}
+                    </View> */}
+                {/* <View>
                     <Text style={styles.label}>Estado:</Text>
                     <Controller
-                        control={control}
-                        render={({ onBlur, onChange, value }) => (
-                            <TextInput
-                                autoCompleteType='off'
-                                autoCorrect={false}
-                                textContentType='addressState'
-                                style={styles.input}
-                                onBlur={onBlur}
-                                onChangeText={(value) => onChange(value)}
-                                value={value}
-                            />
-                        )}
-                        rules={{ required: 'O estado é obrigatório.' }}
-                        name='state'
-                        defaultValue=''
+                    control={control}
+                    render={({ onBlur, onChange, value }) => (
+                    <TextInput
+                    autoCompleteType='off'
+                    autoCorrect={false}
+                    textContentType='addressState'
+                    style={styles.input}
+                    onBlur={onBlur}
+                    onChangeText={(value) => onChange(value)}
+                    value={value}
+                    />
+                    )}
+                    rules={{ required: 'O estado é obrigatório.' }}
+                    name='state'
+                    defaultValue=''
                     />
                     {errors.state && <Text style={{ color: 'red' }}>{errors.state.message}</Text>}
-                </View>
+                    </View> */}
                 <View>
                     <Text style={styles.label}>Preço:</Text>
                     <Controller
@@ -186,10 +217,10 @@ export default function CreateEvent() {
                             />
                         )}
                         rules={{ required: 'O preço é obrigatório.' }}
-                        name='price'
+                        name='price_raw'
                         defaultValue=''
                     />
-                    {errors.price && <Text style={{ color: 'red' }}>{errors.price.message}</Text>}
+                    {errors.price_raw && <Text style={{ color: 'red' }}>{errors.price_raw.message}</Text>}
                 </View>
                 <View>
                     <Text style={styles.label}>Descrição:</Text>

@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
+import api from '../services/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface FormData {
     email: string;
@@ -13,7 +15,14 @@ export default function Login() {
     const { control, handleSubmit, errors } = useForm({ mode: 'onTouched' });
     const onSubmit = (data: FormData) => {
         console.log(data);
-        navigation.navigate('Home');
+        api.post('login', data).then((res) => {
+            AsyncStorage.setItem('token', res.data.token).then(() => {
+                navigation.navigate('Home');
+            });
+            console.log('login feito com sucesso\n', res.data.user);
+        }).catch((err) => {
+            console.log('erro no login\n', err);
+        });
     };
     const onError = (errors: Object) => { console.log(errors) };
 
