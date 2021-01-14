@@ -14,12 +14,12 @@ export default function Login() {
     const navigation = useNavigation();
     const { control, handleSubmit, errors } = useForm({ mode: 'onTouched' });
     const onSubmit = (data: FormData) => {
-        console.log(data);
+        /* console.log(data); */
         api.post('login', data).then((res) => {
             AsyncStorage.setItem('token', res.data.token).then(() => {
                 navigation.navigate('Home');
             });
-            console.log('login feito com sucesso\n', res.data.user);
+            /* console.log('login feito com sucesso\n', res.data.user); */
         }).catch((err) => {
             console.log('erro no login\n', err);
         });

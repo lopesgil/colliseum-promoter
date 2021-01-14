@@ -1,11 +1,34 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { FAB } from 'react-native-paper';
+import { FAB, Card, Caption, Paragraph, Button } from 'react-native-paper';
+import api from '../services/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Login() {
+interface EventData {
+    id: number,
+    date: string,
+    name: string,
+    description: string,
+    price: number,
+}
+
+type RootStackParamList = {
+    Login: undefined,
+    Register: undefined,
+    CreateEvent: undefined,
+    Home: { event: EventData } | undefined,
+    EditEvent: { eventId: number },
+}
+
+
+type HomeScreenProp = RouteProp<RootStackParamList, 'Home'>;
+
+export default function Home() {
     const navigation = useNavigation();
+    const route = useRoute<HomeScreenProp>();
+    const [events, setEvents] = useState<Array<EventData>>([]);
     const event = {
         name: "Wacken OA - Edição 2021",
         description: "Descrição do Evento. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ",
@@ -16,7 +39,24 @@ export default function Login() {
         },
     }
 
+    useEffect(() => {
+        AsyncStorage.getItem('token').then((token) => {
+            api.get('promoterEvents', {
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                },
+            }).then((res) => {
+                setEvents(res.data);
+                /* console.log('eventos carregados com sucesso\n', res.data) */
+            }).catch((err) => {
+                console.log('falha no carregamento dos eventos\n', err);
+            });
+        }).catch((err) => {
+            console.log('falha na recuperação do token\n', err);
+        });
+    }, [route.params?.event]);
 
+    if (!(events.length > 0)) return <Text>Loading</Text>;
     return (
         <View style={styles.container}>
             <LinearGradient 
@@ -25,12 +65,26 @@ export default function Login() {
                 >
                 <Text style={styles.title}>MEUS EVENTOS</Text>
             </LinearGradient>
-            <View style={styles.eventBox}>
+            {/* <View style={styles.eventBox}>
                 <Text style={styles.index}>{event.name}</Text>
                 <Text style={styles.description}>{event.description}</Text>
                 <Text style={styles.index}>{event.date}</Text>
                 <Button title='Ver participantes e Editar Evento' onPress={() => navigation.navigate('EditEvent')} />
-            </View>
+                </View> */}
+            { events.map(event => {
+                  return (
+                      <Card key={event.id}>
+                          <Card.Title title={event.name} subtitle={event.date}/>
+                          <Card.Content>
+                              <Paragraph>{event.description}</Paragraph>
+                              <Caption>{event.price}</Caption>
+                          </Card.Content>
+                          <Card.Actions>
+                              <Button onPress={() => navigation.navigate('EditEvent', { event: event })}>Editar Evento</Button>
+                          </Card.Actions>
+                      </Card>
+                  )
+            }) }
             <FAB
                 style={styles.fab}
                 small
@@ -103,7 +157,7 @@ const styles = StyleSheet.create({
     fab: {
         position: 'absolute',
         margin: 16,
-        right: 5,
-        bottom: 45,
+        right: 0,
+        bottom: 0,
     },
 });

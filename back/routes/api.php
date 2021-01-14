@@ -50,6 +50,7 @@ Route::post('login', [PassportController::class, 'login']);
 Route::group(['middleware' => 'auth:api'], function() {
     
     Route::post('event', [EventController::class, 'store'])->middleware(Promoter::class);
+    Route::get('promoterEvents', [UserController::class, 'showPromoterEvents'])->middleware(Promoter::class);
     Route::get('getDetails', [PassportController::class, 'getDetails']);
     Route::get('logout', [PassportController::class, 'logout']);
     //admin routes

@@ -10,7 +10,23 @@ import CreateEvent from './src/pages/CreateEvent';
 import EditEvent from './src/pages/EditEvent'
 import Home from './src/pages/Home'
 
-const { Navigator, Screen } = createStackNavigator();
+interface EventData {
+    id: number,
+    date: string,
+    name: string,
+    description: string,
+    price: number,
+}
+
+type RootStackParamList = {
+    Login: undefined,
+    Register: undefined,
+    CreateEvent: undefined,
+    Home: { event: EventData } | undefined,
+    EditEvent: { event: EventData },
+}
+
+const { Navigator, Screen } = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (

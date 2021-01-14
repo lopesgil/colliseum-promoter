@@ -41,7 +41,7 @@ export default function CreateEvent() {
                 }
             }).then((res) => {
                 console.log('evento criado com sucesso\n', res.data);
-                navigation.navigate('Home');
+                navigation.navigate('Home', { event: res.data });
             }).catch((err) => {
                 console.log('erro na criação do evento\n',err);
             });

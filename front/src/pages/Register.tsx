@@ -21,12 +21,12 @@ export default function Register() {
     const { control, getValues, handleSubmit, errors } = useForm({ mode: 'onTouched' });
     const onSubmit = (data: RegisterData) => {
         data.role = 'promoter';
-        console.log(data);
+        /* console.log(data); */
         api.post('register', data).then((response) => {
             AsyncStorage.setItem('token', response.data.token).then(() => {
                 navigation.navigate('Home');
             });
-            console.log('cadastrado com sucesso\n', response.data.user);
+            /* console.log('cadastrado com sucesso\n', response.data.user); */
         }).catch((err) => {
             console.log('erro no cadastro\n', err);
         });
