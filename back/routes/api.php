@@ -27,7 +27,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //event routes
 Route::get('events', [EventController::class, 'index']);
 Route::get('event/{id}', [EventController::class, 'show']);
-Route::put('event/{id}', [EventController::class, 'update']);
 Route::post('search', [EventController::class, 'searchEvent']);
 
 //user Routes
@@ -50,6 +49,7 @@ Route::post('login', [PassportController::class, 'login']);
 Route::group(['middleware' => 'auth:api'], function() {
     
     Route::post('event', [EventController::class, 'store'])->middleware(Promoter::class);
+    Route::put('event/{id}', [EventController::class, 'update'])->middleware(Promoter::class);
     Route::get('promoterEvents', [UserController::class, 'showPromoterEvents'])->middleware(Promoter::class);
     Route::get('getDetails', [PassportController::class, 'getDetails']);
     Route::get('logout', [PassportController::class, 'logout']);

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { Button } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
@@ -12,6 +13,12 @@ interface EventData {
     name: string,
     description: string,
     price: number,
+}
+
+interface FormData {
+    name: string,
+    date: string,
+    description: string,
 }
 
 type RootStackParamList = {
@@ -28,7 +35,26 @@ export default function EditEvent() {
     const navigation = useNavigation();
     const route = useRoute<EditEventScreenProp>();
     const event = route.params.event;
-    const test = () => {return 'test'}
+
+    const { control, handleSubmit } = useForm({ mode: 'onTouched' });
+    const onSubmit = (data: FormData) => {
+        AsyncStorage.getItem('token').then((token) => {
+            api.put(`event/${event.id}`, data, {
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                }
+            }).then((res) => {
+                /* console.log('evento atualizado com sucesso\n', res.data); */
+                const ev = res;
+                navigation.navigate('Home', { event: ev });
+            }).catch((err) => {
+                console.log('erro na atualização do evento\n', err);
+            });
+        }).catch((err) => {
+            console.log('erro na recuperação do token\n', err);
+        });
+    }
+    const onError = (errors: Object) => { console.log(errors) }
 
     const handleDelete = () => {
         AsyncStorage.getItem('token').then((token) => {
@@ -37,7 +63,6 @@ export default function EditEvent() {
                     'Authorization': 'Bearer ' + token,
                 }
             }).then((res) => {
-                console.log('evento deletado com sucesso\n', res);
                 navigation.navigate('Home', { eventDeleted: event.id });
             }).catch((err) => {
                 console.log('erro na deleção do evento\n', err);
@@ -55,37 +80,61 @@ export default function EditEvent() {
                     colors = {['#FF4D00', '#FF9345']}
                     style={styles.linearGradient}
                 >
-                    <TextInput 
-                        style={styles.title}
-                        defaultValue={event.name}
-                    />
                 </LinearGradient>
             </View>
 
+            <Text style={styles.index}>Nome</Text>
+            <Controller
+                control={control}
+                render={(props) => (
+                    <TextInput
+                        style={styles.title}
+                        onBlur={props.onBlur}
+                        onChangeText={(value) => props.onChange(value)}
+                        value={props.value}
+                    />
+                )}
+                name='name'
+                defaultValue={event.name}
+            />
 
             <Text style={styles.index}>Descrição do Evento</Text>
-            <TextInput 
-                style={styles.description}
+            <Controller
+                control={control}
+                render={(props) => (
+                    <TextInput
+                        style={styles.description}
+                        multiline={true}
+                        onBlur={props.onBlur}
+                        onChangeText={(value) => props.onChange(value)}
+                        value={props.value}
+                    />
+                )}
+                name='description'
                 defaultValue={event.description}
-                multiline={true}
             />
 
             <Text style={styles.index}>Data</Text>
-            <View>
-                <TextInput 
-                    style={styles.description}
-                    defaultValue={event.date}
-                    multiline={true}
-                />
-            </View>
+            <Controller
+                control={control}
+                render={(props) => (
+                    <TextInput
+                        style={styles.title}
+                        onBlur={props.onBlur}
+                        onChangeText={(value) => props.onChange(value)}
+                        value={props.value}
+                    />
+                )}
+                name='date'
+                defaultValue={event.date}
+            />
 
-            <View style={styles.deleteButton}>
-                <Button color="transparent" title='DELETAR EVENTO' onPress={handleDelete} />
-            </View>
-
-            <View style={styles.submitButton}>
-                <Button title='SALVAR ALTERAÇÕES' onPress={test} />
-            </View>
+            <Button mode='contained' onPress={handleSubmit(onSubmit, onError)}>
+                SALVAR ALTERAÇÕES
+            </Button>
+            <Button mode='outlined' onPress={handleDelete}>
+                DELETAR EVENTO
+            </Button>
         </View>
 
 
