@@ -23,7 +23,7 @@ describe('rendering: ', () => {
         getByText('Senha:');
         getByLabelText('email input');
         getByLabelText('password input');
-        getByText('ENTRAR');
+        getByText('LOGIN');
         getByText('CADASTRAR-SE');
     });
 });
@@ -36,7 +36,7 @@ describe('validation: ', () => {
 
         const emailInput = getByLabelText('email input');
         const passwordInput = getByLabelText('password input');
-        const enterButton = getByText('ENTRAR');
+        const enterButton = getByText('LOGIN');
 
         await act(async () => {
             fireEvent(emailInput, 'onBlur');
