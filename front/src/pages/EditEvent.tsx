@@ -244,6 +244,6 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 4,
         backgroundColor: '#FF4D00',
-        fontColor: '#000000'
+        color: '#000000'
     },
 });

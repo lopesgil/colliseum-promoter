@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 4,
         backgroundColor: '#FF9345',
-        fontColor: '#000000'
+        color: '#000000'
     },
     input: {
         backgroundColor: 'white',
