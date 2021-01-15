@@ -113,14 +113,14 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 6,
         backgroundColor: '#FF4D00',
-        fontColor: '#000000'
+        color: '#000000'
     },
     button1: {
         marginTop: 20,
         height: 40,
         borderRadius: 6,
         backgroundColor: 'transparent',
-        fontColor: '#000000',
+        color: '#000000',
         borderColor: '#FF4D00',
         borderWidth: 3,
     },
