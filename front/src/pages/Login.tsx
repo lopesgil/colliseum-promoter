@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ImageBackground } from 'react-native';
+import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
 import api from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import loginImage from '../../assets/login.png'
 
 interface FormData {
     email: string;
@@ -28,6 +30,7 @@ export default function Login() {
 
     return (
         <View style={styles.container}>
+            <ImageBackground source={loginImage} resizeMode='contain' style={styles.bgImage}>
             <View style={styles.formBox}>
                 <View>
                     <Text style={styles.label}>E-mail:</Text>
@@ -79,13 +82,11 @@ export default function Login() {
                     />
                     {errors.password && <Text style={{ color: 'red' }}>{errors.password.message}</Text>}
                 </View>
-                <View style={styles.button}>
-                    <Button title='ENTRAR' onPress={handleSubmit(onSubmit, onError)} />
-                </View>
-                <View style={styles.button}>
-                    <Button title='CADASTRAR-SE' onPress={() => navigation.navigate('Register')} />
-                </View>
+                    <Button style= {styles.button} onPress={handleSubmit(onSubmit, onError)} ><Text style={{color: '#000'}}>LOGIN</Text>  </Button>
+
+                    <Button style= {styles.button1} onPress={() => navigation.navigate('Register')} ><Text style={{color: '#000'}}>CADASTRAR-SE</Text> </Button>
             </View>
+            </ImageBackground>
         </View>
     );
 }
@@ -93,27 +94,42 @@ export default function Login() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 8,
+        padding: 0,
         justifyContent: 'center',
-        backgroundColor: '#0e101c',
     },
     formBox: {
         paddingVertical: 20,
+        paddingHorizontal: 20,
     },
     label: {
         margin: 10,
         marginLeft: 0,
-        color: 'white',
+        color: 'black',
     },
     button: {
         marginTop: 20,
         height: 40,
-        borderRadius: 4,
+        borderRadius: 6,
+        backgroundColor: '#FF4D00',
+        fontColor: '#000000'
+    },
+    button1: {
+        marginTop: 20,
+        height: 40,
+        borderRadius: 6,
+        backgroundColor: 'transparent',
+        fontColor: '#000000',
+        borderColor: '#FF4D00',
+        borderWidth: 3,
     },
     input: {
         backgroundColor: 'white',
         height: 40,
         padding: 10,
         borderRadius: 20,
-    }
+    },
+    bgImage: {
+        flex: 1,
+        justifyContent: 'center',
+      },
 });
