@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 /* import DateTimePicker from '@react-native-community/datetimepicker'; */
 import { useForm, Controller } from 'react-hook-form';
 import api from '../services/api';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Button } from 'react-native-paper';
 
 interface RegisterData {
     name: string,
@@ -34,7 +36,10 @@ export default function Register() {
     const onError = (errors: Object) => { console.log(errors) };
 
     return (
+        <LinearGradient 
+                colors = {['#EEF2F2', '#8E9EAB']} style={styles.title}>
         <View style={styles.container}>
+            <Text style={styles.title}>Crie sua conta</Text>
             <View style={styles.formBox}>
                 <View>
                     <Text style={styles.label}>Nome:</Text>
@@ -197,10 +202,11 @@ export default function Register() {
                     {errors.passwordConfirmation && <Text style={{ color: 'red' }}>{errors.passwordConfirmation.message}</Text>}
                 </View>
                 <View style={styles.button}>
-                    <Button title='CADASTRAR' onPress={handleSubmit(onSubmit, onError)} />
+                    <Button onPress={handleSubmit(onSubmit, onError)} ><Text style={{color: '#000'}}>CADASTRAR</Text> </Button>
                 </View>
             </View>
         </View>
+        </LinearGradient>
     )
 }
 
@@ -209,25 +215,38 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 8,
         justifyContent: 'center',
-        backgroundColor: '#0e101c',
     },
     formBox: {
         paddingVertical: 20,
     },
+    title: {
+        backgroundColor: 'transparent' ,
+        fontSize: 30,
+        textAlign: 'center',
+    },
     label: {
         margin: 10,
         marginLeft: 0,
-        color: 'white',
+        color: 'black',
     },
     button: {
         marginTop: 20,
         height: 40,
         borderRadius: 4,
+        backgroundColor: '#FF4D00',
+        fontColor: '#000000'
     },
     input: {
         backgroundColor: 'white',
         height: 40,
         padding: 10,
         borderRadius: 20,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
     }
 });

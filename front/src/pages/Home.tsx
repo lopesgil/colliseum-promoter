@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FAB, Card, Caption, Paragraph, Button } from 'react-native-paper';
 import api from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import COLORS from '../constants'
 
 interface EventData {
     id: number,
@@ -47,14 +48,17 @@ export default function Home() {
         });
     }, [route.params?.event, route.params?.eventDeleted]);
 
-    if (!(events.length > 0)) return <Text>Loading</Text>;
+    //if (!(events.length > 0)) return <Text>Loading</Text>;
     return (
+        <LinearGradient 
+                colors = {['#EEF2F2', '#8E9EAB']} style={styles.title}>
         <View style={styles.container}>
             <LinearGradient 
                 colors = {['#FF4D00', '#FF9345']}
                 style={styles.linearGradient}
                 >
-                <Text style={styles.title}>MEUS EVENTOS</Text>
+                <Text style={styles.title}>Meus Eventos</Text>
+                
             </LinearGradient>
             {/* <View style={styles.eventBox}>
                 <Text style={styles.index}>{event.name}</Text>
@@ -62,16 +66,20 @@ export default function Home() {
                 <Text style={styles.index}>{event.date}</Text>
                 <Button title='Ver participantes e Editar Evento' onPress={() => navigation.navigate('EditEvent')} />
                 </View> */}
+                
             { events.map(event => {
                   return (
-                      <Card key={event.id}>
-                          <Card.Title title={event.name} subtitle={event.date}/>
+                      <Card style={styles.eventBox} key={event.id}>
+                          <Card.Title title={event.name} style={styles.title} subtitle={event.date}/>
+                          <Image style = {styles.image}
+                            source={{
+                                uri: 'http://www.folhadonordeste.com.br/arquivos/imgnot/b836e78340dce3e20911f9d27840c7e6.jpg',}}/>
                           <Card.Content>
-                              <Paragraph>{event.description}</Paragraph>
-                              <Caption>{event.price}</Caption>
+                              <Paragraph style={styles.description}>{event.description}</Paragraph>
+                              <Caption>R${event.price}</Caption>
                           </Card.Content>
                           <Card.Actions>
-                              <Button onPress={() => navigation.navigate('EditEvent', { event: event })}>Editar Evento</Button>
+                              <Button style= {styles.button} onPress={() => navigation.navigate('EditEvent', { event: event })}><Text style={{color: '#000'}}>Editar Evento</Text></Button>
                           </Card.Actions>
                       </Card>
                   )
@@ -83,37 +91,43 @@ export default function Home() {
                 onPress={() => {navigation.navigate('CreateEvent')}}
             />
         </View>
+        </LinearGradient>
         
     );
 }
 
 const styles = StyleSheet.create({
+    eventBox: {
+        flex: 10,
+        padding: 8,
+        justifyContent: 'center',
+        backgroundColor: '#F3F3F3',
+        borderRadius: 10,
+        marginBottom: 5,
+        marginTop: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
+    },
     container: {
         flex: 1,
         padding: 8,
         justifyContent: 'center',
-        backgroundColor: '#0e101c',
     },
     description: {
         marginTop: 10,
         flex: 1,
         color: 'black',
+        textAlign: 'justify',
     },
     date: {
         marginTop: 10,
         flex: 1,
         color: 'black',
-    },
-    eventBox: {
-        flex: 10,
-        padding: 8,
-        marginTop: 10,
-        justifyContent: 'center',
-        borderRadius: 10,
-        backgroundColor: '#FFFFFF',
-    },
-    formBox: {
-        paddingVertical: 20,
     },
     label: {
         margin: 10,
@@ -124,6 +138,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
         height: 40,
         borderRadius: 4,
+        backgroundColor: '#FF9345',
+        fontColor: '#000000'
     },
     input: {
         backgroundColor: 'white',
@@ -132,8 +148,18 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     linearGradient: {
-        flex: 1,
         padding: 8,
+        borderRadius: 10,
+        flex: 1,
+        marginBottom: 3,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
+        textAlign: 'center',
     },
     title: {
         backgroundColor: 'transparent' ,
@@ -150,5 +176,13 @@ const styles = StyleSheet.create({
         margin: 16,
         right: 0,
         bottom: 0,
+    },
+    image: {
+        flex: 1,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        width: 300,
+        height: 200,
+        resizeMode: "contain",
     },
 });

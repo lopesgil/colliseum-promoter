@@ -73,22 +73,17 @@ export default function EditEvent() {
     }
 
     return (
+        <LinearGradient 
+                colors = {['#EEF2F2', '#8E9EAB']} style={styles.title}>
         <View style={styles.container}>
-            
-            <View>
-                <LinearGradient 
-                    colors = {['#FF4D00', '#FF9345']}
-                    style={styles.linearGradient}
-                >
-                </LinearGradient>
-            </View>
+            <Text style={styles.title}>Edite seu Evento</Text>
 
             <Text style={styles.index}>Nome</Text>
             <Controller
                 control={control}
                 render={(props) => (
                     <TextInput
-                        style={styles.title}
+                        style={styles.title1}
                         onBlur={props.onBlur}
                         onChangeText={(value) => props.onChange(value)}
                         value={props.value}
@@ -119,7 +114,7 @@ export default function EditEvent() {
                 control={control}
                 render={(props) => (
                     <TextInput
-                        style={styles.title}
+                        style={styles.title1}
                         onBlur={props.onBlur}
                         onChangeText={(value) => props.onChange(value)}
                         value={props.value}
@@ -129,13 +124,14 @@ export default function EditEvent() {
                 defaultValue={event.date}
             />
 
-            <Button mode='contained' onPress={handleSubmit(onSubmit, onError)}>
-                SALVAR ALTERAÇÕES
+            <Button style={styles.button} onPress={handleSubmit(onSubmit, onError)}>
+            <Text style={{color: '#000'}}>SALVAR ALTERAÇÕES</Text>
             </Button>
-            <Button mode='outlined' onPress={handleDelete}>
-                DELETAR EVENTO
+            <Button style={styles.button} onPress={handleDelete}>
+            <Text style={{color: '#000'}}>DELETAR EVENTO</Text>
             </Button>
         </View>
+        </LinearGradient>
 
 
     )
@@ -145,34 +141,81 @@ export default function EditEvent() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 0,
+        padding: 20,
         justifyContent: 'center',
-        backgroundColor: 'white',
     },
     linearGradient: {
         flex: 1,
         padding: 8,
     },
+    label: {
+        margin: 10,
+        marginLeft: 0,
+        color: 'black',
+    },
     title: {
         backgroundColor: 'transparent' ,
         flex: 1,
         fontSize: 30,
+        alignSelf: 'center',
     },
     index: {
         fontSize: 24,
         fontWeight: "bold",
         color: "black",
         marginTop: 10,
+        height: 40,
+        padding: 10,
+        borderRadius: 20,
+    },
+    title1:{
+        marginTop: 10,
+        flex: 3,
+        color: 'black',
+        backgroundColor: 'white',
+        height: 40,
+        padding: 10,
+        fontSize: 30,
+        borderRadius: 8,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
     },
     description: {
         marginTop: 10,
         flex: 3,
         color: 'black',
+        backgroundColor: 'white',
+        height: 40,
+        padding: 10,
+        borderRadius: 8,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
     },
     date: {
         marginTop: 10,
         flex: 1,
         color: 'black',
+        backgroundColor: 'white',
+        height: 40,
+        padding: 10,
+        borderRadius: 8,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
     },
     address: {
         backgroundColor: 'transparent' ,
@@ -195,5 +238,12 @@ const styles = StyleSheet.create({
         flex: 3,
         resizeMode: "cover",
         marginTop: 10,
+    },
+    button: {
+        marginTop: 20,
+        height: 40,
+        borderRadius: 4,
+        backgroundColor: '#FF4D00',
+        fontColor: '#000000'
     },
 });
