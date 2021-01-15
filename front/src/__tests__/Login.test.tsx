@@ -4,6 +4,17 @@ import api from '../services/api';
 import MockedNavigator from '../__mocks__/MockedNavigator';
 import Login from '../pages/Login';
 
+const mockedNavigate = jest.fn();
+
+jest.mock('@react-navigation/native', () => {
+    return {
+        ...(jest.requireActual('@react-navigation/native')),
+        useNavigation: () => ({
+            navigate: mockedNavigate,
+        })
+    }
+});
+
 describe('rendering: ', () => {
     test('renders the whole screen', async ()=> {
         const { getByText, getByLabelText } = render(<MockedNavigator component={Login} />);
@@ -45,19 +56,25 @@ describe('validation: ', () => {
         expect(queryByText('O e-mail é obrigatório.')).toBeNull();
 
         jest.spyOn(api, 'post').mockImplementation((url: string, data: any ) => {
-            return Promise.resolve({});
+            return Promise.resolve({
+                data: {
+                    token: 'all okf'
+                }
+            });
         });
 
         await act(async () => {
             fireEvent.press(enterButton);
         })
         expect(api.post).not.toBeCalled();
+        expect(mockedNavigate).not.toBeCalled();
 
         await act(async () => {
             fireEvent.changeText(passwordInput, '12345678');
             fireEvent.press(enterButton);
         })
         expect(api.post).toBeCalled();
+        expect(mockedNavigate).toBeCalled();
         jest.clearAllMocks();
     });
 
