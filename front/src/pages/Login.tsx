@@ -38,6 +38,7 @@ export default function Login() {
                         control={control}
                         render={(props) => (
                             <TextInput
+                                accessibilityLabel='email input'
                                 autoCompleteType='email'
                                 autoCorrect={false}
                                 keyboardType='email-address'
@@ -66,6 +67,7 @@ export default function Login() {
                         control={control}
                         render={(props) => (
                             <TextInput
+                                accessibilityLabel='password input'
                                 secureTextEntry
                                 autoCompleteType='password'
                                 autoCorrect={false}
